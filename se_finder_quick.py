@@ -62,7 +62,7 @@ def rough_finder(sid, hbeta, o3, fe2):
         except ValueError:
             continue
     o3vshbeta = i_o3 / i_hbeta
-    fe2vshbeta = i_fe2 / (i_hbeta * len(fe2))
+    fe2vshbeta = i_fe2 / i_hbeta
     return [o3vshbeta, fe2vshbeta]
 
 
@@ -70,8 +70,6 @@ def rough_finder(sid, hbeta, o3, fe2):
 def plot_o3_vs_fe2(o3, fe2):
     fig = plt.figure()
     plt.scatter(o3, fe2)
-    plt.xlim(0, 6)
-    plt.ylim(0, 0.6)
     plt.xlabel("Relative Intensity of OIII 5007")
     plt.ylabel("Normalized Relative Intensity of Fe II")
     plt.show()
