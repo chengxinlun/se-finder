@@ -7,7 +7,7 @@ from scipy.stats import chisquare
 import matplotlib.pylab as plt
 from astropy.modeling import models, fitting
 import warnings
-import fe_temp_constructor
+import fe_temp_observed
 from base import read_raw_data, get_total_sid_list, mask_points, check_line, extract_fit_part
 import time
 
@@ -80,7 +80,7 @@ def hbeta_complex_fit_2(wave, flux, error):
     flux = flux - cont_fit(wave)
     plt.plot(wave, flux)
     hbeta_complex_fit_func = \
-            fe_temp_constructor.FeII_template(9900, 0, 1500.0, 4.0, 3.0, 3.0, 3.0, 1.0)
+            fe_temp_observed.FeII_template_obs(0.0, 1100.0, 4.7)
     fitter = fitting.LevMarLSQFitter()
     with warnings.catch_warnings():
         warnings.filterwarnings('error')

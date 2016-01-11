@@ -45,6 +45,7 @@ class FeII_template(Fittable1DModel):
             gf.append(float(each_line.split("  ")[1]))
             deltae.append(float(each_line.split("  ")[2]))
         filein.close()
+        print("Reading finished")
         return [center, gf, deltae]
     
     
@@ -112,17 +113,17 @@ class FeII_template(Fittable1DModel):
         i_r_P = calc_i_ratio(center_P, gf_P, deltae_P, temperature, 4)
 
         # Add the gaussians together
-        res = models.Gaussian1D(i_lzw1 * i_r_lzw1[0], center_lzw1[0], width * np.sqrt(3/2)*center_lzw1[0]/299792.458)
+        res = models.Gaussian1D(i_lzw1 * i_r_lzw1[0], center_lzw1[0] + shift, width * np.sqrt(3/2)*center_lzw1[0]/299792.458)
         for i in range(1,len(center_lzw1)):
-            res = res + models.Gaussian1D(i_lzw1 * i_r_lzw1[i], center_lzw1[i], width*np.sqrt(3/2)*center_lzw1[i]/299792.458)
+            res = res + models.Gaussian1D(i_lzw1 * i_r_lzw1[i], center_lzw1[i] + shift, width*np.sqrt(3/2)*center_lzw1[i]/299792.458)
         for i in range(len(center_F)):
-            res = res + models.Gaussian1D(i_F * i_r_F[i], center_F[i], width*np.sqrt(3/2)*center_F[i]/299792.458)
+            res = res + models.Gaussian1D(i_F * i_r_F[i], center_F[i] + shift, width*np.sqrt(3/2)*center_F[i]/299792.458)
         for i in range(len(center_S)):
-            res = res + models.Gaussian1D(i_S * i_r_S[i], center_S[i], width*np.sqrt(3/2)*center_S[i]/299792.458)
+            res = res + models.Gaussian1D(i_S * i_r_S[i], center_S[i] + shift, width*np.sqrt(3/2)*center_S[i]/299792.458)
         for i in range(len(center_G)):
-            res = res + models.Gaussian1D(i_G * i_r_G[i], center_G[i], width*np.sqrt(3/2)*center_G[i]/299792.458)
+            res = res + models.Gaussian1D(i_G * i_r_G[i], center_G[i] + shift, width*np.sqrt(3/2)*center_G[i]/299792.458)
         for i in range(len(center_P)):
-            res = res + models.Gaussian1D(i_P * i_r_P[i], center_P[i], width*np.sqrt(3/2)*center_P[i]/299792.458)
+            res = res + models.Gaussian1D(i_P * i_r_P[i], center_P[i] + shift, width*np.sqrt(3/2)*center_P[i]/299792.458)
         return res(x)
 
 # Do not run anything upon import
