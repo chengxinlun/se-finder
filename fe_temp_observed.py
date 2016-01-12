@@ -13,9 +13,6 @@ class FeII_template_obs(Fittable1DModel):
     i_r_l1 = Parameter()
 
     center_l1 = [
-        4861.30,
-        4340.40,
-        4101.73,
         4026.36,
         4093.66,
         4178.86,
@@ -78,9 +75,6 @@ class FeII_template_obs(Fittable1DModel):
         5425.27,
         5432.98]
     i_l1 = [
-        1.00,
-        0.42,
-        0.22,
         0.08,
         0.06,
         0.06,

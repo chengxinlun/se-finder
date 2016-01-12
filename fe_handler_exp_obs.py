@@ -18,50 +18,6 @@ class SpectraException(Exception):
     pass
 
 
-# Function to fit Hbeta for se quasars
-def hbeta_complex_fit(wave, flux, error):
-    fig = plt.figure()
-    plt.plot(wave, flux)
-    # (Hbeta, FeII, OIII, OIII, FeII)
-    hbeta_complex_fit_func = models.Lorentz1D(5.0, 4853.0, 40.0, bounds = {"amplitude": [0, 50.0], "x_0": [4833,4873]}) + \
-            models.Gaussian1D(5.0, 4930.0, 1.0, bounds = {"amplitude": [0, 20.0], "mean": [4900, 4950]}) + \
-            models.Gaussian1D(3.0, 4959.0, 3.0, bounds = {"amplitude": [0, 25.0], "mean": [4950, 4970]}) + \
-            models.Gaussian1D(5.0, 4961.0, 3.0, bounds = {"amplitude": [0, 25.0], "mean": [4955, 4970]}) + \
-            models.Gaussian1D(20.0, 5007.0, 6.0, bounds = {"amplitude": [0, 50.0], "mean": [4990, 5020]}) + \
-            models.Gaussian1D(5.0, 5018.0, 7.0, bounds = {"amplitude": [0, 25.0], "mean": [5013, 5030]}) + \
-            models.Linear1D((flux[0] - flux[-1])/(wave[0]-wave[-1]), (-flux[0] * wave[-1] + flux[-1] * wave[0])/(wave[0]-wave[-1]))
-    #hbeta_complex_fit_func.mean_3.tied = lambda x: -48.0 + x.mean_4
-    #hbeta_complex_fit_func.amplitude_3.tied = lambda x: 1.0 / 2.99 * x.amplitude_4
-    #hbeta_complex_fit_func.stddev_3.tied = lambda x: 1.0 * x.stddev_4
-    fitter = fitting.LevMarLSQFitter()
-    with warnings.catch_warnings():
-        warnings.filterwarnings('error')
-        try:
-            fit = fitter(hbeta_complex_fit_func, wave, flux, weights = error, maxiter = 10000)
-        except Warning:
-            expected = np.array(fit(wave))
-            plt.plot(wave, expected)
-            cont = models.Linear1D(fit.parameters[18], fit.parameters[19])
-            plt.plot(wave, cont(wave))
-            fig.savefig("Hbeta-l-failed.jpg")
-            plt.close()
-            raise SpectraException("Line Hbeta fit failed")
-    expected = np.array(fit(wave))
-    plt.plot(wave, expected)
-    cont = models.Linear1D(fit.parameters[18], fit.parameters[19])
-    plt.plot(wave, cont(wave))
-    fig.savefig("Hbeta-l.jpg")
-    plt.close()
-    rcs = 0
-    for i in range(len(flux)):
-        rcs = rcs + (flux[i] - expected[i]) ** 2.0
-    rcs = rcs / np.abs(len(flux)-17)
-    if rcs > 10.0:
-        plt.close()
-        raise SpectraException("Line Hbeta reduced chi-square too large" + str(rcs))
-    return fit.parameters, rcs
-
-
 # Function to fit Hbeta lines for non-se quasars
 def hbeta_complex_fit_2(wave, flux, error):
     os.chdir("../../")
@@ -80,7 +36,12 @@ def hbeta_complex_fit_2(wave, flux, error):
     flux = flux - cont_fit(wave)
     plt.plot(wave, flux)
     hbeta_complex_fit_func = \
-            fe_temp_observed.FeII_template_obs(0.0, 1100.0, 4.7)
+            fe_temp_observed.FeII_template_obs(0.0, 1100.0, 4.7) + \
+            models.Gaussian1D(10.0, 4961.30, 40.0) + \
+            models.Gaussian1D(2.0, 4340.40, 2.0) + \
+            models.Gaussian1D(2.0, 4101.73, 2.0) + \
+            models.Gaussian1D(5.0, 4960.0, 6.0) + \
+            models.Gaussian1D(20.0, 5008.0, 6.0)
     fitter = fitting.LevMarLSQFitter()
     with warnings.catch_warnings():
         warnings.filterwarnings('error')
