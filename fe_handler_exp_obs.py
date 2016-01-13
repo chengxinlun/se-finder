@@ -23,31 +23,21 @@ def hbeta_complex_fit_2(wave, flux, error):
     os.chdir("../../")
     fig = plt.figure()
     plt.plot(wave, flux)
-    [cont_wave, cont_flux, cont_error] = extract_fit_part(wave, flux, error, 4040, 4060)
-    [temp_wave, temp_flux, temp_error] = extract_fit_part(wave, flux, error, 5080, 5100)
-    cont_wave = np.append(cont_wave, temp_wave)
-    cont_flux = np.append(cont_flux, temp_flux)
-    cont_error = np.append(cont_error, temp_error)
-    cont_fitter = fitting.LevMarLSQFitter()
-    cont = models.PowerLaw1D(cont_flux[0], cont_wave[0], - np.log(cont_flux[-1]/cont_flux[0]) / np.log(cont_wave[-1]/cont_wave[0]), fixed = {"x_0": True})
-    cont_fit = cont_fitter(cont, cont_wave, cont_flux, weights = cont_error, maxiter = 10000)
-    plt.plot(wave, cont_fit(wave))
-    plt.show()
-    flux = flux - cont_fit(wave)
-    plt.plot(wave, flux)
     hbeta_complex_fit_func = \
-            fe_temp_observed.FeII_template_obs(0.0, 1100.0, 4.7) + \
-            models.Gaussian1D(10.0, 4961.30, 40.0) + \
-            models.Gaussian1D(2.0, 4340.40, 2.0) + \
+            fe_temp_observed.FeII_template_obs(6.2, 2000.0, 2.6, 6.2, 2000.0, 2.6) + \
+            models.Gaussian1D(3.6, 4853.30, 40.0) + \
+            models.Gaussian1D(2.0, 4346.40, 2.0) + \
             models.Gaussian1D(2.0, 4101.73, 2.0) + \
             models.Gaussian1D(5.0, 4960.0, 6.0) + \
-            models.Gaussian1D(20.0, 5008.0, 6.0)
+            models.Gaussian1D(20.0, 5008.0, 6.0) + \
+            models.PowerLaw1D(flux[0], wave[0], - np.log(flux[-1]/flux[0]) / np.log(wave[-1]/wave[0]), fixed = {"x_0": True})
     fitter = fitting.LevMarLSQFitter()
     with warnings.catch_warnings():
         warnings.filterwarnings('error')
         try:
             start = time.time()
             fit = fitter(hbeta_complex_fit_func, wave, flux, weights = error, maxiter = 3000)
+            print("Time taken: ")
             print(time.time() - start)
         except SpectraException:
             print(fit)
@@ -55,9 +45,9 @@ def hbeta_complex_fit_2(wave, flux, error):
             expected = np.array(fit(wave))
             plt.plot(wave, expected)
             plt.show()
-            fig.savefig("Hbeta-g-failed.jpg")
+            fig.savefig("Failed.jpg")
             plt.close()
-            raise SpectraException("Line Hbeta fit failed")
+            raise SpectraException("Fit failed")
     print(fit)
     print(fit.parameters)
     expected = np.array(fit(wave))
