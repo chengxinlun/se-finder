@@ -417,21 +417,20 @@ class FeII_template_obs(Fittable1DModel):
 
     @staticmethod
     def evaluate(x, shift_l1, width_l1, i_r_l1, shift_n3, width_n3, i_r_n3):
-        res = models.Lorentz1D(
-            i_r_l1 * FeII_template_obs.i_l1[0],
-            FeII_template_obs.center_l1[0] + shift_l1,
-            width_l1 * np.sqrt(3 / 2) * FeII_template_obs.center_l1[0] / 299792.458)
-        for i in range(1, len(FeII_template_obs.center_l1)):
-            res = res + models.Lorentz1D(
+        res = 0.0
+        for i in range(0, len(FeII_template_obs.center_l1)):
+            f = models.Lorentz1D(
                 i_r_l1 * FeII_template_obs.i_l1[i],
                 FeII_template_obs.center_l1[i] + shift_l1,
                 width_l1 * np.sqrt(3 / 2) * FeII_template_obs.center_l1[i] / 299792.458)
+            res = res + f(x)
         for i in range(0, len(FeII_template_obs.center_n3)):
-            res = res + models.Lorentz1D(
+            f = models.Lorentz1D(
                 i_r_n3 * FeII_template_obs.i_n3[i],
                 FeII_template_obs.center_n3[i] + shift_n3,
                 width_n3 * np.sqrt(3 / 2) * FeII_template_obs.center_n3[i] / 299792.458)
-        return res(x)
+            res = res + f(x)
+        return res
 
 if __name__ != "main":
     pass

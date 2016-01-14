@@ -7,6 +7,8 @@ Current list of functions for public use:
     mask_points: delete points with error = 0
     check_line: check whether wavelength is inside the range of wave
     extract_fit_part: extract the part between min_wave and max_wave
+    union: find the union of ranges
+    save_fig: save a figure in png format to designated directory
 '''
 
 # Import necessary modules
@@ -82,3 +84,20 @@ def extract_fit_part(wave, flux, error, min_wave, max_wave):
     flux_fit = np.array(flux_fit)
     error_fit = np.array(error_fit)
     return [wave_fit, flux_fit, error_fit]
+
+
+# Function to find union of ranges
+def union(a):
+    b = []
+    for begin,end in sorted(a):
+        if b and b[-1][1] >= begin - 1:
+            b[-1] = (b[-1][0], end)
+        else:
+            b.append((begin, end))
+    return b
+
+
+# Function to save figures
+def save_fit(fig, directory, name):
+    fig.save_fig(directrory + "/" + name + ".png")
+
