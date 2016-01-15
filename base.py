@@ -98,6 +98,6 @@ def union(a):
 
 
 # Function to save figures
-def save_fit(fig, directory, name):
-    fig.save_fig(directrory + "/" + name + ".png")
+def save_fig(fig, directory, name):
+    fig.savefig(directory + "/" + name + ".png")
 
