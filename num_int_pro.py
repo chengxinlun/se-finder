@@ -438,12 +438,12 @@ class FeII_template_obs(Fittable1DModel):
         return res
 
 fe2_func = FeII_template_obs(0.0, 2000.0, 1.0, 0.0, 2000.0, 1.0)
-x = np.linspace(4000.0, 5000.0, 10000)
+x = np.linspace(4000.0, 5500.0, 10000)
 plt.plot(x, fe2_func(x))
 plt.show()
 plt.close()
 st = time.time()
-fe2_flux = quad(fe2_func, 4000.0, 5000.0, epsabs = 0.1, limit = 1000)
+fe2_flux = quad(fe2_func, 4000.0, 5500.0, limit = 1000)
 td = time.time() - st
 print(fe2_flux)
 print(str(td))

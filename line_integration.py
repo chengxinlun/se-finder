@@ -3,7 +3,6 @@ import numpy as np
 from base import get_total_sid_list
 from fe_temp_observed import FeII_template_obs
 from astropy.modeling import models
-from scipy.integrate import quad
 import matplotlib.pyplot as plt
 
 
@@ -26,10 +25,9 @@ def read_fit_res(sid):
 def calc_flux(res):
     # Separate the parameter and construct integrating function
     fe2_func = FeII_template_obs(res[0], res[1], res[2], res[3], res[4], res[5])
-    hbeta_func = models.Gaussian1D(res[6], res[7], res[8])
-    o3_func = models.Gaussian1D(res[18], res[19], res[20])
     # Integrate to get flux
-    fe2_flux = quad(fe2_func, 4000.5, 5499.5, epsabs = 0.1, limit = 1000)
+    x = np.linspace(4000.0, 5500.0, 100000)
+    fe2_flux = np.trapz(fe2_func(x), x)
     hbeta_flux = np.sqrt(2.0 * np.pi) * abs(res[8]) * res[6]
     o3_flux = np.sqrt(2.0 * np.pi) * abs(res[20]) * res[18]
     return [fe2_flux, hbeta_flux, o3_flux]
