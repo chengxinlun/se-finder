@@ -28,4 +28,9 @@ r_fe2 = fe2_a / hbeta_a
 r_o3 = o3_a / hbeta_a
 
 plt.scatter(r_o3, r_fe2)
+plt.xlabel("Relative flux of OIII 5008")
+plt.ylabel("Relative flux of FeII")
+fig.suptitle("OIII vs FeII")
+plt.xlim(xmin = 0.0)
+plt.ylim(ymin = 0.0)
 plt.show()
