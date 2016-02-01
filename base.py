@@ -27,7 +27,7 @@ def read_database(filein):
 
 # Recommended method to read raw data
 def read_raw_data(sid):
-    os.chdir("raw/"  +  str(sid))
+    os.chdir("raw/" + str(sid))
     wave = read_database("wave.pkl")
     flux = read_database("flux.pkl")
     fluxerr = read_database("ivar.pkl")
@@ -61,7 +61,7 @@ def mask_points(wave, flux, error):
 def check_line(wave, wave_line):
     max_wave = max(wave)
     min_wave = min(wave)
-    if ((max_wave > (wave_line  +  150.0)) and (min_wave < (wave_line  -  150.0))) == True:
+    if ((max_wave > (wave_line + 150.0)) and (min_wave < (wave_line - 150.0))) == True:
         return True
     else:
         return False

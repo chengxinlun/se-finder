@@ -46,14 +46,15 @@ def main_process(sid):
     return [fe2, hbeta, o3]
 
 
-dic = dict()
-sid_list = get_total_sid_list()
-for sid in sid_list:
-    try:
-        dic[str(sid)] = main_process(str(sid))
-    except FileNotFound:
-        print("Fit file not found: " + str(sid))
-        continue
-    print(dic[str(sid)])
-    print("Process finished for " + str(sid))
-output_flux(dic)
+if __name__ == "main":
+    dic = dict()
+    sid_list = get_total_sid_list()
+    for sid in sid_list:
+        try:
+            dic[str(sid)] = main_process(str(sid))
+        except FileNotFound:
+            print("Fit file not found: " + str(sid))
+            continue
+        print(dic[str(sid)])
+        print("Process finished for " + str(sid))
+    output_flux(dic)
