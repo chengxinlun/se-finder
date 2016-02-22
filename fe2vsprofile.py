@@ -25,6 +25,7 @@ for each in result_dict.keys():
     fe2.append(result_dict[each][0])
     prof.append(profile_dict[each])
     plt.annotate(s = str(each), xy = (profile_dict[each], result_dict[each][0] / result_dict[each][1]))
+    print(each)
 
 hbeta_a = np.array(hbeta)
 fe2_a = np.array(fe2)
@@ -32,6 +33,8 @@ fe2_a = np.array(fe2)
 r_fe2 = fe2_a / hbeta_a
 
 plt.scatter(prof, r_fe2)
+plt.xlabel("FWHM / STD of Hbeta")
+plt.ylabel("Relative flux of FeII")
+plt.ylim(ymin  =  0.0, ymax = 1.1 * np.amax(r_fe2))
+plt.axvline(2.355, 0, 1, label = "Gaussian", linestyle = 'dashed')
 plt.show()
-
-

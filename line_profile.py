@@ -40,7 +40,7 @@ sid_list = get_total_sid_list()
 res_dic = dict()
 for sid in sid_list:
     try:
-        res_dic[sid] = main_process(str(sid))
+        res_dic[str(sid)] = main_process(str(sid))
     except Exception:
         continue
 outfile = open("profile-hbeta.pkl", "wb")
